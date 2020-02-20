@@ -1,0 +1,20 @@
+{
+  "name": "eas-command-and-ctrl-service",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "start:dev": "nodemon"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "@cloudant/cloudant": "^4.2.3",
+    "dotenv-safe": "^8.2.0"
+  }
+}
