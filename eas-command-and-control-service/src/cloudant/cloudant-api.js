@@ -1,14 +1,10 @@
 const cloudant = require("./cloudant-connection");
 
 class CrudAPI {
-  insert(callback) {
-    console.log("Creating document 'mydoc'");
+  insert(data) {
+    console.log("Inserting next consumption point");
     // specify the id of the document so you can update and delete it later
-    cloudant.use("eas").insert({ a: 1, b: "two" }, function(err, data) {
-      if (callback) {
-        callback(err, data);
-      }
-    });
+    cloudant.use("eas").insert(data, function(err, data) {});
   }
 }
 

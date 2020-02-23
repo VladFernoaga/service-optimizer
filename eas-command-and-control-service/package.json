@@ -16,6 +16,8 @@
   "dependencies": {
     "@cloudant/cloudant": "^4.2.3",
     "dotenv-safe": "^8.2.0",
+    "fs": "0.0.1-security",
+    "read-excel-file": "^4.0.5",
     "rxjs": "^6.5.4"
   }
 }

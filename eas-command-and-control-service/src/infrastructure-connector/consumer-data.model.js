@@ -1,9 +1,15 @@
 module.exports = class CustomerData {
-  constructor(customerId, equipmentIdentifier, startTime, endTime, consumedKW) {
+  constructor(
+    customerId,
+    equipmentIdentifier,
+    activePower,
+    reactivePower,
+    timestamp
+  ) {
     this.customerId = customerId;
     this.equipmentIdentifier = equipmentIdentifier;
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.consumedKW = consumedKW;
+    this.timestamp = timestamp;
+    this.activePower = activePower;
+    this.reactivePower = reactivePower;
   }
 };

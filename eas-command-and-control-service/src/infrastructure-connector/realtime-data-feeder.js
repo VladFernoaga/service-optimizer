@@ -1,6 +1,16 @@
-const ConsumerData = require("./consumer-data.model");
-const connection = require("../cloudant/cloudant-api");
+const crudAPI = require("../cloudant/cloudant-api");
 
 class DataFeeder {
-  async listenToData() {}
+  constructor(dataProvider) {
+    this.dataProvider = dataProvider;
+    dataProvider.subscribe(consumerData => {
+      handleConsumerData(consumerData);
+    });
+  }
 }
+
+function handleConsumerData(consumerData) {
+  crudAPI.insert(consumerData);
+}
+
+module.exports = DataFeeder;
