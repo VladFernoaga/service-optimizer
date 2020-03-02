@@ -1,8 +1,11 @@
 function myAction(args) {
-  console.log("vlad was here");
-  const leftPad = require("left-pad");
-  const lines = args.lines || [];
-  return { result: "CLI updated", padded: lines.map(l => leftPad(l, 30, ".")) };
+  console.log("Console log form vlad");
+  const Telegraf = require("telegraf"); // import telegram lib
+  const bot = new Telegraf("<TELEGRAM_BOT_ID>"); // get the token from envirenment variable
+  bot.telegram
+    .sendMessage("<VLAD_CHAT_ID>", "hehe vlad is here")
+    .catch(err => console.log(err));
+  return { result: "CLI updated" };
 }
 
-global.main = myAction;
+exports.main = myAction;

@@ -1,14 +1,15 @@
 {
   "name": "price-catalog-AI-optimizer",
-  "main": "dist/bundle.js",
+  "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "deploy": "ibmcloud fn action  update ai-optimizer/price-catalog-AI-optimizer  dist/bundle.js --kind nodejs:10"
+    "build": "rimraf  build.zip & npm prune & zip -r build.zip *",
+    "deploy": "ibmcloud fn action  update ai-optimizer/price-catalog-AI-optimizer  build.zip --kind nodejs:10"
   },
   "dependencies": {
-    "left-pad": "1.1.3"
+    "axios": "^0.19.2",
+    "telegraf": "^3.36.0"
   },
   "devDependencies": {
-    "webpack": "^3.8.1"
+    "rimraf": "^3.0.2"
   }
 }
