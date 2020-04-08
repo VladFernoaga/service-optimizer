@@ -23,13 +23,15 @@ class DataFeederService {
 
 async function createEvents(rows, dataProvider) {
   for (let i = 0; i < rows.length; i++) {
-    const customerId = rows[i][0];
-    const equipmentId = rows[i][1];
-    const activePower = rows[i][2];
-    const reactivePower = rows[i][3];
+    const nlcId = rows[i][1];
+    const customerId = rows[i][2];
+    const equipmentId = rows[i][3];
+    const activePower = rows[i][4];
+    const reactivePower = rows[i][5];
 
     dataProvider.consumptionEvent.next(
       new ConsumerData(
+        nlcId,
         customerId,
         equipmentId,
         activePower,

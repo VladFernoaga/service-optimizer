@@ -1,13 +1,15 @@
 module.exports = class CustomerData {
   constructor(
+    nlcId,
     customerId,
-    equipmentIdentifier,
+    equipmentId,
     activePower,
     reactivePower,
     timestamp
   ) {
+    this.nlcId = nlcId;
     this.customerId = customerId;
-    this.equipmentIdentifier = equipmentIdentifier;
+    this.equipmentIdentifier = equipmentId;
     this.timestamp = timestamp;
     this.activePower = activePower;
     this.reactivePower = reactivePower;
