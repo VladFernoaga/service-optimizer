@@ -1,22 +1,26 @@
-const request = require('request');
+const fetch = require("node-fetch");
 
-
+const url = 'http://localhost:3000/model';
 class ModelRunner {
+    constructor() {
+        this.cachedModel = undefined;
+    }
 
-    getLocalModel(callback) {
-        return request('http://localhost:3000/model', {
-            json: true
-        }, callback);
+    async _getModelFromCache() {
+        if (this.cachedModel === undefined) {
+            const response = await fetch(url);
+            this.cachedModel = await response.json();
+            console.log('Model form network was retrieved');
+            console.log(JSON.stringify(this.cachedModel, undefined, 4));
+        }
+        return this.cachedModel;
     }
 
 
-    runModel(inputParam, callbackOnActivation) {
-        this.getLocalModel((err, res, body) => {
-            // execute model and decide over the next step
-            const transition = this._executeModel(inputParam, body);
-            callbackOnActivation(inputParam, transition);
-        });
-
+    async runModel(inputParam, callbackOnActivation) {
+        const model = await this._getModelFromCache();
+        const transition = this._executeModel(inputParam, model);
+        callbackOnActivation(inputParam, transition);
     }
 
     _executeModel(inputParam, localModel) {
@@ -28,11 +32,8 @@ class ModelRunner {
                 }
             }
         }
-
         throw new Error('Model failed to execute');
     }
-
-
 }
 
 module.exports = new ModelRunner();
