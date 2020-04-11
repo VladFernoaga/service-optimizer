@@ -7,28 +7,29 @@ class ModelController {
                     id: 'plan_1',
                     activation: {
                         type: "range",
-                        start: 24,
-                        end: 54
+                        start: 0,
+                        end: 0.4
                     },
-                    output: "Plan2"
+                    transition: "plan_1"
                 },
                 {
                     id: 'plan_2',
                     activation: {
                         type: "range",
-                        start: 55,
-                        end: 70
+                        start: 0.4,
+                        end: 0.8
                     },
-                    output: "Plan3"
+                    transition: "plan_2"
                 },
                 {
                     id: 'plan_3',
                     activation: {
                         type: "range",
-                        start: 71,
-                        end: 85
+                        start: 0.8,
+                        end: 1
                     },
-                    output: "Plan3"
+                    transition: "plan_3"
+
                 }
             ]
 

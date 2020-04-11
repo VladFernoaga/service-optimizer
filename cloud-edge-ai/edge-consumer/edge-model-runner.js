@@ -1,5 +1,6 @@
 const request = require('request');
 
+
 class ModelRunner {
 
     getLocalModel(callback) {
@@ -9,20 +10,28 @@ class ModelRunner {
     }
 
 
-    runModel(inputParam) {
+    runModel(inputParam, callbackOnActivation) {
         this.getLocalModel((err, res, body) => {
             // execute model and decide over the next step
-            this._executeModel(inputParam, body);
+            const transition = this._executeModel(inputParam, body);
+            callbackOnActivation(inputParam, transition);
         });
 
     }
 
     _executeModel(inputParam, localModel) {
-        // execution logic
-        console.log(inputParam);
-        console.log(localModel);
 
+        for (const state of localModel.states) {
+            if (state.activation.type === 'range') {
+                if (state.activation.start <= inputParam && inputParam < state.activation.end) {
+                    return state.transition;
+                }
+            }
+        }
+
+        throw new Error('Model failed to execute');
     }
+
 
 }
 
