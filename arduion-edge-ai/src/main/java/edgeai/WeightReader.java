@@ -2,8 +2,8 @@ package edgeai;
 
 public interface WeightReader {
 
-	int[][] getWeightsHiddenLayer1();
-	int[][] getWeightsHiddenLayer2();
-	int[][] getWeightsOuputLayer();
+	double[][] getWeightsHiddenLayer1();
+	double[][] getWeightsHiddenLayer2();
+	double[][] getWeightsOutputLayer();
 	Statistic[] getParameterStatistic();
 }

@@ -7,53 +7,62 @@ import org.sintef.jarduino.JArduino;
 
 public class EdgeAI extends JArduino {
 
-	private WeightReader wReader = new HTTTPWeightReader();
+	private WeightReader wReader = new LocalWeightReader();
 
 	// Read the weights for hidden layer1 already containing the additional bias
 	// parameters
-	int[][] layer1Weights = wReader.getWeightsHiddenLayer1();
+	double[][] layer1Weights = wReader.getWeightsHiddenLayer1();
 	// Read the weights for hidden layer2 already containing the additional bias
 	// parameters
-	int[][] layer2Weights = wReader.getWeightsHiddenLayer2();
+	double[][] layer2Weights = wReader.getWeightsHiddenLayer2();
 	// Read the weights for output already containing the additional bias parameters
-	int[][] outputlayerWeights = wReader.getWeightsOuputLayer();
+	double[][] outputLayerWeights = wReader.getWeightsOutputLayer();
+
+	Statistic[] statistics = wReader.getParameterStatistic();
 
 	@Override
 	protected void loop() throws InvalidPinTypeException {
 		// Run prediction using randomized inputs between range [0, 4095]
-		int[][] inputParams = getRandomizedInputParams();
-		
+		double[][] inputParams = getRandomizedInputParams();
+
 		// Print denormalized inputs
-		
+		System.out.println("Denormalized");
+		System.out.println(inputParams[0][0]);
+		System.out.println(inputParams[1][0]);
+		System.out.println(inputParams[2][0]);
+
 		// Print normalized inputs
-		
-		int prediction = runPrediciton(inputParams);
-		
-		// Print denormalized prediction
-		
+		System.out.println("Normalized");
+		System.out.println((inputParams[0][0] - statistics[0].mean) / statistics[0].std);
+		System.out.println((inputParams[1][0] - statistics[1].mean) / statistics[1].std);
+		System.out.println((inputParams[2][0] - statistics[2].mean) / statistics[2].std);
+
+		double prediction = runPrediction(inputParams);
+
 		// Print normalized prediction
+		System.out.println("Normalized");
+		System.out.println((prediction - statistics[3].mean) / statistics[3].std);
+
+		// Print denormalized prediction
+		System.out.println("Denormalized");
+		System.out.println(prediction);
 	}
 
-	@Override
-	protected void setup() throws InvalidPinTypeException {
-
-	}
-
-	int runPrediciton(int[][] inputParams) {
+	double runPrediction(double[][] inputParams) {
 		// Run activations on first layer
-		int[][] outputLayer1 = multiply(inputParams, layer1Weights);
+		double[][] outputLayer1 = multiply(inputParams, layer1Weights);
 		applyRelu(outputLayer1);
 
 		// Run Activations on second layer
-		int[][]  outputLayer2 = multiply(outputLayer1, layer2Weights);
+		double[][] outputLayer2 = multiply(outputLayer1, layer2Weights);
 		applyRelu(outputLayer2);
-		
-		int predictionResult = multiply(outputLayer2, outputlayerWeights)[0][0];
-		
+
+		double predictionResult = multiply(outputLayer2, outputLayerWeights)[0][0];
+
 		return predictionResult;
 	}
 
-	private void applyRelu(int activations[][]) {
+	private void applyRelu(double activations[][]) {
 		for (int row = 0; row < activations.length; row++) {
 			for (int col = 0; col < activations[row].length; col++) {
 				activations[row][col] = activations[row][col] < 0 ? 0 : activations[row][col];
@@ -61,8 +70,8 @@ public class EdgeAI extends JArduino {
 		}
 	}
 
-	private int[][] multiply(int[][] input, int[][] currentLayerWeights) {
-		int[][] result = new int[input.length][currentLayerWeights[0].length];
+	private double[][] multiply(double[][] input, double[][] currentLayerWeights) {
+		double[][] result = new double[input.length][currentLayerWeights[0].length];
 
 		for (int row = 0; row < result.length; row++) {
 			for (int col = 0; col < result[row].length; col++) {
@@ -72,7 +81,7 @@ public class EdgeAI extends JArduino {
 		return result;
 	}
 
-	private int multiplyMatricesCell(int[][] mat1, int[][] mat2, int row, int col) {
+	private int multiplyMatricesCell(double[][] mat1, double[][] mat2, int row, int col) {
 		int cell = 0;
 		for (int i = 0; i < mat2.length; i++) {
 			cell += mat1[row][i] * mat2[i][col];
@@ -80,13 +89,18 @@ public class EdgeAI extends JArduino {
 		return cell;
 	}
 
-	private int[][] getRandomizedInputParams() {
-		int[][] inputParam = new int[4][1];
+	private double[][] getRandomizedInputParams() {
+		double[][] inputParam = new double[4][1];
 		inputParam[0][0] = new Random().nextInt(4095); // PE
 		inputParam[1][0] = new Random().nextInt(4095); // ...
 		inputParam[2][0] = new Random().nextInt(4095); // ..
-		inputParam[3][0] = new Random().nextInt(4095); // Bias
+		inputParam[3][0] = 1; // Bias
 		return inputParam;
+	}
+	
+	@Override
+	protected void setup() throws InvalidPinTypeException {
+
 	}
 
 }

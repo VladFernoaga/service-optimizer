@@ -1,21 +1,21 @@
 package edgeai;
 
-public class HTTTPWeightReader implements WeightReader {
+public class HTTPWeightReader implements WeightReader {
 
 	@Override
-	public int[][] getWeightsHiddenLayer1() {
+	public double[][] getWeightsHiddenLayer1() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int[][] getWeightsHiddenLayer2() {
+	public double[][] getWeightsHiddenLayer2() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int[][] getWeightsOuputLayer() {
+	public double[][] getWeightsOutputLayer() {
 		// TODO Auto-generated method stub
 		return null;
 	}
