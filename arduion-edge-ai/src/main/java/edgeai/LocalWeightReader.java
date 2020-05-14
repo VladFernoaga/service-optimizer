@@ -49,7 +49,7 @@ public class LocalWeightReader implements WeightReader {
 		statistics[1] = new Statistic( 1.602173913043478251e+03, 4.005372101450439004e+02);
 		statistics[2] = new Statistic( 7.622826086956521294e+02, 6.125875771655369135e+02);
 		statistics[3] = new Statistic( 8.276250000000000284e+01, 3.892861019322533167e+01);
-		return null;
+		return statistics;
 	}
 
 }

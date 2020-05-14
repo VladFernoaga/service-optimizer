@@ -71,7 +71,7 @@ public class EdgeAI extends JArduino {
 	}
 
 	private double[][] multiply(double[][] input, double[][] currentLayerWeights) {
-		double[][] result = new double[input.length][currentLayerWeights[0].length];
+		double[][] result = new double[currentLayerWeights.length][input[0].length];
 
 		for (int row = 0; row < result.length; row++) {
 			for (int col = 0; col < result[row].length; col++) {
@@ -83,8 +83,8 @@ public class EdgeAI extends JArduino {
 
 	private int multiplyMatricesCell(double[][] mat1, double[][] mat2, int row, int col) {
 		int cell = 0;
-		for (int i = 0; i < mat2.length; i++) {
-			cell += mat1[row][i] * mat2[i][col];
+		for (int i = 0; i < mat1.length; i++) {
+			cell +=  mat1[i][col] *mat2[row][i];
 		}
 		return cell;
 	}
@@ -103,4 +103,8 @@ public class EdgeAI extends JArduino {
 
 	}
 
+	
+	public static void main(String[] args) throws InvalidPinTypeException {
+		new EdgeAI().loop();
+	}
 }
