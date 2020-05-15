@@ -1,7 +1,9 @@
 package edgeai;
+
 import java.util.Random;
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+
 public class EdgeAI extends JArduino {
 	private WeightReader wReader = new LocalWeightReader();
 	// Read the weights for hidden layer1 already containing the additional bias
@@ -13,6 +15,7 @@ public class EdgeAI extends JArduino {
 	// Read the weights for output already containing the additional bias parameters
 	double[][] outputLayerWeights = wReader.getWeightsOutputLayer();
 	Statistic[] statistics = wReader.getParameterStatistic();
+
 	@Override
 	protected void loop() throws InvalidPinTypeException {
 		// Run prediction using randomized inputs between range [0, 4095]
@@ -24,9 +27,9 @@ public class EdgeAI extends JArduino {
 		System.out.println(inputParams[2][0]);
 		// Print denormalized inputs
 		System.out.println("Denormalized");
-		System.out.println(((inputParams[0][0] - 2048)/4096 * statistics[0].std) + statistics[0].mean);
-		System.out.println(((inputParams[1][0]  - 2048)/4096 * statistics[1].std) + statistics[1].mean);
-		System.out.println(((inputParams[2][0]  - 2048)/4096 * statistics[2].std) + statistics[2].mean);
+		System.out.println((inputParams[0][0] * statistics[0].std) + statistics[0].mean);
+		System.out.println((inputParams[1][0] * statistics[1].std) + statistics[1].mean);
+		System.out.println((inputParams[2][0] * statistics[2].std) + statistics[2].mean);
 		double prediction = runPrediction(inputParams);
 		// Print normalized prediction
 		System.out.println("Normalized output");
@@ -69,26 +72,25 @@ public class EdgeAI extends JArduino {
 	private int multiplyMatricesCell(double[][] mat1, double[][] mat2, int row, int col) {
 		int cell = 0;
 		for (int i = 0; i < mat1.length; i++) {
-			cell +=  mat1[i][col] *mat2[row][i];
+			cell += mat1[i][col] * mat2[row][i];
 		}
 		return cell;
 	}
 
 	private double[][] getRandomizedInputParams() {
 		double[][] inputParam = new double[4][1];
-		inputParam[0][0] = new Random().nextInt(4095); // PE
-		inputParam[1][0] = new Random().nextInt(4095); // RPM
-		inputParam[2][0] = new Random().nextInt(4095); // delta_p
+		inputParam[0][0] = (new Random().nextInt(4095) - 2048) / 4096; // PE
+		inputParam[1][0] = (new Random().nextInt(4095) - 2048) / 4096; // RPM
+		inputParam[2][0] = (new Random().nextInt(4095) - 2048) / 4096; // delta_p
 		inputParam[3][0] = 1; // Bias
 		return inputParam;
 	}
-	
+
 	@Override
 	protected void setup() throws InvalidPinTypeException {
 
 	}
 
-	
 	public static void main(String[] args) throws InvalidPinTypeException {
 		new EdgeAI().loop();
 	}
