@@ -43,9 +43,17 @@ public class EdgeAI extends JArduino {
 		// Run activations on first layer
 		double[][] outputLayer1 = multiply(inputParams, layer1Weights);
 		applyRelu(outputLayer1);
+		
+		outputLayer1 =extendRowBy1(outputLayer1);
+		outputLayer1[outputLayer1.length-1][0]=1;
+		
 		// Run Activations on second layer
 		double[][] outputLayer2 = multiply(outputLayer1, layer2Weights);
 		applyRelu(outputLayer2);
+		
+		outputLayer2 =extendRowBy1(outputLayer2);
+		outputLayer2[outputLayer2.length-1][0]=1;
+		
 		double predictionResult = multiply(outputLayer2, outputLayerWeights)[0][0];
 		return predictionResult;
 	}
@@ -66,11 +74,22 @@ public class EdgeAI extends JArduino {
 				result[row][col] = multiplyMatricesCell(input, currentLayerWeights, row, col);
 			}
 		}
+		
+		return result;
+	}
+	
+	private double[][] extendRowBy1(double[][] mat){
+		double[][] result = new double[mat.length+1][mat[0].length];
+		for(int i =0; i<mat.length;i++) {
+			for(int j=0; j< mat[i].length;j++) {
+				result[i][j]= mat[i][j];
+			}
+		}
 		return result;
 	}
 
-	private int multiplyMatricesCell(double[][] mat1, double[][] mat2, int row, int col) {
-		int cell = 0;
+	private double multiplyMatricesCell(double[][] mat1, double[][] mat2, int row, int col) {
+		double cell = 0;
 		for (int i = 0; i < mat1.length; i++) {
 			cell += mat1[i][col] * mat2[row][i];
 		}
@@ -79,9 +98,9 @@ public class EdgeAI extends JArduino {
 
 	private double[][] getRandomizedInputParams() {
 		double[][] inputParam = new double[4][1];
-		inputParam[0][0] = (new Random().nextInt(4095) - 2048) / 4096; // PE
-		inputParam[1][0] = (new Random().nextInt(4095) - 2048) / 4096; // RPM
-		inputParam[2][0] = (new Random().nextInt(4095) - 2048) / 4096; // delta_p
+		inputParam[0][0] = (double)(new Random().nextInt(4095) - 2048) / 2048; // PE
+		inputParam[1][0] = (double)(new Random().nextInt(4095) - 2048) / 2048; // RPM
+		inputParam[2][0] = (double)(new Random().nextInt(4095) - 2048) / 2048; // delta_p
 		inputParam[3][0] = 1; // Bias
 		return inputParam;
 	}
