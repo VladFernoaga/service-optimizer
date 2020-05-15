@@ -1,4 +1,4 @@
-package edgeai;
+package ro.unitbv;
 
 public interface WeightReader {
 

@@ -1,10 +1,9 @@
-package edgeai;
+package ro.unitbv;
 
 import java.util.Random;
-import org.sintef.jarduino.InvalidPinTypeException;
-import org.sintef.jarduino.JArduino;
 
-public class EdgeAI extends JArduino {
+public class LocalRun {
+
 	private WeightReader wReader = new LocalWeightReader();
 	// Read the weights for hidden layer1 already containing the additional bias
 	// parameters
@@ -16,8 +15,7 @@ public class EdgeAI extends JArduino {
 	double[][] outputLayerWeights = wReader.getWeightsOutputLayer();
 	Statistic[] statistics = wReader.getParameterStatistic();
 
-	@Override
-	protected void loop() throws InvalidPinTypeException {
+	protected void loop(){
 		// Run prediction using randomized inputs between range [0, 4095]
 		double[][] inputParams = getRandomizedInputParams();
 		// Print normalized inputs
@@ -42,18 +40,14 @@ public class EdgeAI extends JArduino {
 	double runPrediction(double[][] inputParams) {
 		// Run activations on first layer
 		double[][] outputLayer1 = multiply(inputParams, layer1Weights);
-		applyRelu(outputLayer1);
-		
+		applyRelu(outputLayer1);	
 		outputLayer1 =extendRowBy1(outputLayer1);
-		outputLayer1[outputLayer1.length-1][0]=1;
-		
+		outputLayer1[outputLayer1.length-1][0]=1;	
 		// Run Activations on second layer
 		double[][] outputLayer2 = multiply(outputLayer1, layer2Weights);
-		applyRelu(outputLayer2);
-		
+		applyRelu(outputLayer2);	
 		outputLayer2 =extendRowBy1(outputLayer2);
 		outputLayer2[outputLayer2.length-1][0]=1;
-		
 		double predictionResult = multiply(outputLayer2, outputLayerWeights)[0][0];
 		return predictionResult;
 	}
@@ -105,12 +99,4 @@ public class EdgeAI extends JArduino {
 		return inputParam;
 	}
 
-	@Override
-	protected void setup() throws InvalidPinTypeException {
-
-	}
-
-	public static void main(String[] args) throws InvalidPinTypeException {
-		new EdgeAI().loop();
-	}
 }

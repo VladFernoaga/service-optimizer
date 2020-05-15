@@ -1,4 +1,4 @@
-package edgeai;
+package ro.unitbv;
 
 public class HTTPWeightReader implements WeightReader {
 
