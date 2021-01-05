@@ -6,7 +6,7 @@
     "deploy": "ibmcloud fn action  update ai-optimizer/price-catalog-AI-optimizer  build.zip --kind nodejs:10"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "telegraf": "^3.36.0"
   },
   "devDependencies": {
